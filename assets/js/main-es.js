@@ -27,17 +27,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // === 2. Mobile Menu Toggle ===
     const menuToggle = document.querySelector('.menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            const isOpen = navMenu.classList.toggle('active');
+    if (menuToggle && navMenu) {
+        const setMenuState = (isOpen) => {
             menuToggle.setAttribute('aria-expanded', isOpen);
             menuToggle.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        };
+
+        menuToggle.addEventListener('click', () => {
+            const isOpen = navMenu.classList.toggle('active');
+            setMenuState(isOpen);
         });
         navMenu.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                menuToggle.innerHTML = '&#9776;';
+                setMenuState(false);
             });
         });
     }
@@ -61,26 +65,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // === 4. WhatsApp Forms ===
+    const numeroDestino = '5584999533552';
+    const encodeGreeting = (strings, ...encodedValues) =>
+        strings.reduce((acc, str, idx) => acc + encodeURIComponent(str) + (encodedValues[idx] || ''), '');
+
     const formBase = (formId, isSidebar) => {
         const form = document.getElementById(formId);
         if (!form) return;
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const nome = document.getElementById(isSidebar ? 'sidebar-nome' : 'nome').value;
-            const empresa = isSidebar ? '' : (document.getElementById('empresa')?.value || '');
-            const assunto = document.getElementById(isSidebar ? 'sidebar-servico' : 'assunto').value;
-            const mensagem = isSidebar ? (document.getElementById('sidebar-mensagem')?.value || '') : (document.getElementById('mensagem')?.value || '');
-            const telefone = '5584999533552';
+            const nome = (document.getElementById(isSidebar ? 'sidebar-nome' : 'nome')?.value || '').trim();
+            const empresa = isSidebar ? '' : (document.getElementById('empresa')?.value || '').trim();
+            const assunto = (document.getElementById(isSidebar ? 'sidebar-servico' : 'assunto')?.value || '').trim();
+            const mensagem = (document.getElementById(isSidebar ? 'sidebar-mensagem' : 'mensagem')?.value || '').trim();
 
-            let texto = '';
             if (isSidebar) {
-                texto = `\u00a1Hola! Mi nombre es ${nome}. Tengo inter\u00e9s en el servicio de ${assunto} y me gustar\u00eda agendar una consultor\u00eda.`;
-                if (mensaje) texto += `\n\nMensaje: ${mensaje}`;
+                if (!nome) {
+                    alert('Por favor, ingrese su nombre antes de enviar.');
+                    return;
+                }
             } else {
-                texto = `\u00a1Hola! Mi nombre es ${nome}, de la empresa ${empresa}.\nTengo inter\u00e9s en: ${assunto}.\nMe gustar\u00eda m\u00e1s informaci\u00f3n.`;
-                if (mensagem) texto += `\n\nMensaje: ${mensagem}`;
+                if (!nome || !empresa || !assunto) {
+                    alert('Por favor, complete los campos Nombre, Empresa e Inter\u00e9s Principal antes de enviar.');
+                    return;
+                }
             }
-            window.open(`https://wa.me/${telefone}?text=${encodeURIComponent(texto)}`, '_blank');
+
+            const nomeEnc = encodeURIComponent(nome);
+            const empresaEnc = encodeURIComponent(empresa);
+            const assuntoEnc = encodeURIComponent(assunto);
+            const mensagemEnc = encodeURIComponent(mensagem);
+
+            let mensagemBase = '';
+            if (isSidebar) {
+                mensagemBase = encodeGreeting`\u00a1Hola! Mi nombre es ${nomeEnc}. Tengo inter\u00e9s en el servicio de ${assuntoEnc} y me gustar\u00eda agendar una consultor\u00eda.`;
+                if (mensagem) mensagemBase += encodeGreeting`\n\nMensaje: ${mensagemEnc}`;
+            } else {
+                mensagemBase = encodeGreeting`\u00a1Hola! Mi nombre es ${nomeEnc}, de la empresa ${empresaEnc}.\nTengo inter\u00e9s en: ${assuntoEnc}.\nMe gustar\u00eda m\u00e1s informaci\u00f3n.`;
+                if (mensagem) mensagemBase += encodeGreeting`\n\nMensaje: ${mensagemEnc}`;
+            }
+            window.open('https://wa.me/' + numeroDestino + '?text=' + mensagemBase, '_blank');
         });
     };
     formBase('whatsapp-form', false);

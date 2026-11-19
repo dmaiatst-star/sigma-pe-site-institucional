@@ -184,35 +184,28 @@ a {
     width: auto;
     object-fit: contain;
 }
-.logo-badge {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--color-badge-slate);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    border-left: 1px solid var(--color-mist);
-    padding-left: 10px;
-}
-
 .header-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
 }
 
 .nav-menu > ul {
     display: flex;
     list-style: none;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 .nav-menu a {
     color: var(--color-graphite);
     font-weight: 500;
     font-size: 14px;
-    padding: 8px 12px;
+    padding: 8px 10px;
     border-radius: var(--radius-sm);
     transition: var(--transition);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
 }
 .nav-menu a:hover:not(.btn-primary-filled):not(.btn-primary):not(.btn-ghost) {
     color: var(--color-pure-black);
@@ -230,6 +223,7 @@ a {
     align-items: center;
     gap: 4px;
     cursor: pointer;
+    white-space: nowrap;
 }
 ul.dropdown-menu {
     display: none !important;
@@ -288,7 +282,9 @@ ul.dropdown-menu .menu-code {
     gap: 8px;
     align-items: center;
     padding-left: 12px;
+    padding-right: 12px;
     border-left: 1px solid var(--color-mist);
+    border-right: 1px solid var(--color-mist);
 }
 .language-switcher .flag-icon {
     display: flex;
@@ -298,6 +294,33 @@ ul.dropdown-menu .menu-code {
 }
 .language-switcher .flag-icon:hover {
     opacity: 1;
+}
+
+/* Desktop Client Portal Button (Glassnode Ghost Outline) */
+.btn-header-portal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-white);
+    border: 1px solid var(--color-mist);
+    border-radius: var(--radius-sm);
+    color: var(--color-pure-black);
+    font-family: var(--font-inter);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px;
+    white-space: nowrap;
+    text-decoration: none;
+    line-height: 1.3;
+    transition: var(--transition);
+}
+.btn-header-portal:hover {
+    background: var(--color-paper);
+    border-color: var(--color-pure-black);
+    color: var(--color-pure-black);
+}
+.mobile-portal-item {
+    display: none;
 }
 
 /* Mobile Toggle */
@@ -446,22 +469,12 @@ ul.dropdown-menu .menu-code {
 }
 
 .hero-typewriter-wrapper {
-    margin-bottom: var(--spacing-24);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-.typewriter-prefix {
     font-size: var(--text-subheading);
     line-height: var(--leading-subheading);
     font-weight: 500;
     color: var(--color-graphite);
-}
-.typewriter-dynamic {
-    display: block;
-    font-size: var(--text-subheading);
-    line-height: var(--leading-subheading);
-    min-height: 32px;
+    margin-bottom: var(--spacing-24);
+    min-height: 28px;
 }
 .typewriter-word {
     font-weight: 700;
@@ -1434,13 +1447,44 @@ ul.dropdown-menu .menu-code {
     .footer-grid { grid-template-columns: 1fr 1fr; }
 }
 
+@media (min-width: 993px) and (max-width: 1200px) {
+    .header-right {
+        gap: 12px;
+    }
+    .nav-menu > ul {
+        gap: 2px;
+    }
+    .nav-menu a {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
+    .nav-actions {
+        gap: 6px;
+    }
+    .nav-actions a {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    .btn-header-portal {
+        padding: 6px 10px;
+        font-size: 13px;
+        gap: 5px;
+    }
+    .language-switcher {
+        padding-left: 8px;
+        padding-right: 8px;
+        gap: 6px;
+    }
+}
+
 @media (max-width: 992px) {
+    .hero-typewriter-wrapper {
+        min-height: 52px;
+    }
+
     /* Header Container & Brand Isolation */
     .header-container {
         padding: 0 16px;
-    }
-    .logo-badge {
-        display: none !important;
     }
     .logo-img {
         max-height: 38px;
@@ -1450,6 +1494,9 @@ ul.dropdown-menu .menu-code {
     .nav-actions {
         display: none !important;
     }
+    .btn-header-portal {
+        display: none !important;
+    }
 
     /* Compact Header Right & Language Switcher */
     .header-right {
@@ -1457,6 +1504,8 @@ ul.dropdown-menu .menu-code {
     }
     .language-switcher {
         padding-left: 10px;
+        padding-right: 0;
+        border-right: none;
         gap: 6px;
     }
 
@@ -1512,7 +1561,9 @@ ul.dropdown-menu .menu-code {
 
     /* Prominent Action Button inside Drawer */
     .nav-menu-cta {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
         margin-top: 12px;
         padding-top: 12px;
         border-top: 1px solid var(--color-mist);
@@ -1525,6 +1576,40 @@ ul.dropdown-menu .menu-code {
         text-align: center;
         justify-content: center;
         padding: 12px 16px;
+    }
+
+    .mobile-portal-item {
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+    }
+
+    /* High Specificity: Prevents .nav-menu a from overriding .btn-portal-drawer */
+    .nav-menu .btn-portal-drawer,
+    .btn-portal-drawer {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--color-white);
+        border: 1px solid var(--color-mist);
+        border-radius: var(--radius-sm);
+        color: var(--color-pure-black);
+        font-family: var(--font-inter);
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+    .nav-menu .btn-portal-drawer:hover,
+    .btn-portal-drawer:hover {
+        background: var(--color-paper);
+        border-color: var(--color-pure-black);
+        color: var(--color-pure-black);
     }
 
     /* Dropdown inside Mobile Drawer */
@@ -1551,14 +1636,10 @@ ul.dropdown-menu .menu-code {
 }
 
 @media (max-width: 576px) {
-    .typewriter-prefix {
+    .hero-typewriter-wrapper {
         font-size: 18px;
         line-height: 1.4;
-    }
-    .typewriter-dynamic {
-        font-size: 18px;
-        line-height: 1.4;
-        min-height: 28px;
+        min-height: 52px;
     }
     .widget-header {
         flex-direction: column;

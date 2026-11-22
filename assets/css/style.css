@@ -1378,20 +1378,19 @@ ul.dropdown-menu .menu-code {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-sm);
-    background: var(--color-pure-black);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #25D366;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
     z-index: 999;
     transition: var(--transition);
 }
 .float-whatsapp:hover {
-    background: #242424;
+    background-color: #20BA5A;
     transform: translateY(-2px);
 }
 .back-to-top {
@@ -1649,5 +1648,11 @@ ul.dropdown-menu .menu-code {
     .widget-footer {
         flex-wrap: wrap;
         gap: 6px;
+    }
+    .float-whatsapp {
+        bottom: 18px;
+        right: 18px;
+        width: 52px;
+        height: 52px;
     }
 }
